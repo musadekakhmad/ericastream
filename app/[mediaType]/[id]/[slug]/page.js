@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
     return {};
   }
 
-  const title = `${details.title || details.name} | Libra Sinema`;
+  const title = `${details.title || details.name} | Erica Stream`;
   const description = details.overview || 'The hub for high-quality free movies and TV shows for you.';
 
   // Main fix: Prioritize backdrop images for Open Graph.
@@ -64,8 +64,8 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: title,
       description: description,
-      url: `https://LibraSinema.netlify.app/${mediaType}/${id}/${slug}`,
-      siteName: 'Libra Sinema',
+      url: `https://ericastream.netlify.app/${mediaType}/${id}/${slug}`,
+      siteName: 'Erica Stream',
       images: [
         {
           url: ogImageUrl,
