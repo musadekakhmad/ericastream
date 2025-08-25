@@ -8,29 +8,29 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 /*
-  Konfigurasi API
-  Jangan lupa untuk mengisi API KEY Anda di sini.
-  BASE_URL mengarah ke proxy TMDB untuk menghindari masalah CORS.
-  IMAGE_BASE_URL adalah URL dasar untuk gambar poster.
+  API Configuration
+  Don't forget to fill in your API KEY here.
+  BASE_URL points to the TMDB proxy to avoid CORS issues.
+  IMAGE_BASE_URL is the base URL for poster images.
 */
-const API_KEY = 'tmdb-api-proxy.argoyuwono119.workers.dev'; // <-- SILAKAN ISI DENGAN API KEY TMDB ANDA DI SINI
+const API_KEY = 'tmdb-api-proxy.argoyuwono119.workers.dev'; // <-- PLEASE FILL WITH YOUR TMDB API KEY HERE
 const BASE_URL = 'https://tmdb-api-proxy.argoyuwono119.workers.dev';
-// URL dasar untuk gambar OG (backdrop)
+// Base URL for OG (backdrop) images
 const IMAGE_BASE_URL_OG = 'https://image.tmdb.org/t/p/w1280';
-// URL dasar untuk gambar poster
+// Base URL for poster images
 const IMAGE_BASE_URL_POSTER = 'https://image.tmdb.org/t/p/w500';
 
 /*
-  Fungsi untuk mendapatkan metadata dinamis (Penting untuk SEO)
-  Ini akan membuat tag Open Graph dan Twitter Card yang spesifik untuk setiap halaman.
+  Function to get dynamic metadata (Important for SEO)
+  This will create specific Open Graph and Twitter Card tags for each page.
 */
 export async function generateMetadata({ params }) {
-  // Periksa apakah API Key telah diisi
+  // Check if API Key has been filled
   if (!API_KEY) {
-    console.error("Kesalahan: API KEY belum diisi. Silakan tambahkan TMDB API Key Anda.");
+    console.error("Error: API KEY has not been filled. Please add your TMDB API Key.");
     return {
-      title: 'Kesalahan Konfigurasi',
-      description: 'API Key belum diisi. Silakan periksa konfigurasi.',
+      title: 'Configuration Error',
+      description: 'API Key has not been filled. Please check the configuration.',
     };
   }
 
@@ -45,15 +45,15 @@ export async function generateMetadata({ params }) {
   }
 
   const title = `${details.title || details.name} | Libra Sinema`;
-  const description = details.overview || 'Pusat Streaming film dan acara TV gratis berkualitas tinggi untuk Anda.';
+  const description = details.overview || 'The hub for high-quality free movies and TV shows for you.';
 
-  // Perbaikan utama: Prioritaskan gambar backdrop untuk Open Graph.
-  // Gambar backdrop (w1280) lebih cocok dengan rasio 1.91:1
+  // Main fix: Prioritize backdrop images for Open Graph.
+  // Backdrop images (w1280) are more suitable with a 1.91:1 ratio
   const ogImageUrl = details.backdrop_path
     ? `${IMAGE_BASE_URL_OG}${details.backdrop_path}`
     : 'https://placehold.co/1200x630/000000/FFFFFF?text=No+Image';
 
-  // Gambar poster tetap digunakan untuk tampilan di dalam halaman.
+  // Poster images are still used for display within the page.
   const posterUrl = details.poster_path
     ? `${IMAGE_BASE_URL_POSTER}${details.poster_path}`
     : 'https://placehold.co/500x750?text=No+Image';
@@ -69,13 +69,13 @@ export async function generateMetadata({ params }) {
       images: [
         {
           url: ogImageUrl,
-          // Gunakan dimensi yang sesuai dengan gambar backdrop
+          // Use dimensions that fit the backdrop image
           width: 1280,
           height: 720,
           alt: title,
         },
       ],
-      locale: 'id_ID', // Ganti en_US ke id_ID
+      locale: 'en_US', // Changed id_ID to en_US
       type: 'website',
       appId: 'cut.erna.984',
     },
@@ -91,12 +91,12 @@ export async function generateMetadata({ params }) {
 }
 
 /*
-  Fungsi Pengambil Data untuk Halaman Detail
-  Ini adalah kumpulan fungsi async yang mengambil data dari API.
-  Setiap fungsi memiliki penanganan error dasar.
+  Data Fetching Functions for the Detail Page
+  This is a collection of async functions that fetch data from the API.
+  Each function has basic error handling.
 */
 
-// Fungsi untuk mendapatkan detail media
+// Function to get media details
 async function getMediaDetails(mediaType, id) {
   const res = await fetch(`${BASE_URL}/${mediaType}/${id}?api_key=${API_KEY}`);
   if (!res.ok) {
@@ -105,7 +105,7 @@ async function getMediaDetails(mediaType, id) {
   return res.json();
 }
 
-// Fungsi untuk mendapatkan kredit (pemain dan kru)
+// Function to get credits (cast and crew)
 async function getMediaCredits(mediaType, id) {
   const res = await fetch(`${BASE_URL}/${mediaType}/${id}/credits?api_key=${API_KEY}`);
   if (!res.ok) {
@@ -114,7 +114,7 @@ async function getMediaCredits(mediaType, id) {
   return res.json();
 }
 
-// Fungsi untuk mendapatkan video (trailer)
+// Function to get videos (trailers)
 async function getMediaVideos(mediaType, id) {
   const res = await fetch(`${BASE_URL}/${mediaType}/${id}/videos?api_key=${API_KEY}`);
   if (!res.ok) {
@@ -123,7 +123,7 @@ async function getMediaVideos(mediaType, id) {
   return res.json();
 }
 
-// Fungsi untuk mendapatkan media serupa
+// Function to get similar media
 async function getSimilarMedia(mediaType, id) {
   const res = await fetch(`${BASE_URL}/${mediaType}/${id}/similar?api_key=${API_KEY}`);
   if (!res.ok) {
@@ -132,7 +132,7 @@ async function getSimilarMedia(mediaType, id) {
   return res.json();
 }
 
-// Fungsi untuk mendapatkan ulasan pengguna
+// Function to get user reviews
 async function getMediaReviews(mediaType, id) {
   const res = await fetch(`${BASE_URL}/${mediaType}/${id}/reviews?api_key=${API_KEY}`);
   if (!res.ok) {
@@ -141,15 +141,15 @@ async function getMediaReviews(mediaType, id) {
   return res.json();
 }
 
-// Fungsi untuk mendapatkan nama sutradara dari kru
+// Function to get the director's name from the crew
 const getDirector = (crew) => {
   return crew.find(member => member.job === 'Director')?.name || 'Unknown';
 };
 
 /*
-  Komponen Halaman Utama
-  Ini adalah komponen React asinkron yang merender seluruh halaman detail.
-  Ini mengambil semua data yang diperlukan dan menampilkannya.
+  Main Page Component
+  This is an asynchronous React component that renders the entire detail page.
+  It fetches all the necessary data and displays it.
 */
 export default async function MediaDetailPage({ params }) {
   const awaitedParams = await params;
@@ -202,7 +202,7 @@ export default async function MediaDetailPage({ params }) {
           
           {/* Movie Details Section */}
           <div className="md:w-2/3 flex flex-col p-6 md:p-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-wide mb-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight tracking-wide mb-2">
               {mediaTitle}
             </h1>
             {mediaTagline && (
@@ -238,7 +238,7 @@ export default async function MediaDetailPage({ params }) {
                 <svg className="w-5 h-5 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#facc15"/>
                 </svg>
-                <span className="font-semibold text-sm">Sutradara:</span>
+                <span className="font-semibold text-sm">Director:</span>
                 <span className="ml-2 text-sm text-gray-400">{director}</span>
               </div>
 
@@ -260,7 +260,7 @@ export default async function MediaDetailPage({ params }) {
                     <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z" fill="#f87171"/>
                     <path d="M12 6v6l4 2-1 2-5-3V6z" fill="#f87171"/>
                   </svg>
-                  <span className="font-semibold text-sm">Durasi:</span>
+                  <span className="font-semibold text-sm">Duration:</span>
                   <span className="ml-2 text-sm text-gray-400">
                     {runtime ? `${runtime} min` : `${episodeRuntime} min`}
                   </span>
@@ -274,7 +274,7 @@ export default async function MediaDetailPage({ params }) {
                   <svg className="w-5 h-5 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2a10 10 0 00-7.3 16.7A9.92 9.92 0 0012 22a10 10 0 007.3-3.3A9.92 9.92 0 0012 2zM6.5 12a1 1 0 11-1-1 1 1 0 011 1zM17.5 12a1 1 0 11-1-1 1 1 0 011 1zM12 7.5a1 1 0 11-1 1 1 1 0 011-1zM12 16.5a1 1 0 11-1-1 1 1 0 011 1z" fill="#38bdf8"/>
                   </svg>
-                  <span className="font-semibold text-sm">Bahasa Asli:</span>
+                  <span className="font-semibold text-sm">Original Language:</span>
                   <span className="ml-2 text-sm text-gray-400">{originalLanguage.toUpperCase()}</span>
                 </div>
               )}
@@ -288,7 +288,7 @@ export default async function MediaDetailPage({ params }) {
                   </svg>
                   <span className="font-semibold text-sm">Homepage:</span>
                   <Link href={homepage} target="_blank" rel="noopener noreferrer" className="ml-2 text-sm text-blue-400 hover:underline">
-                    Kunjungi
+                    Visit
                   </Link>
                 </div>
               )}
@@ -296,7 +296,7 @@ export default async function MediaDetailPage({ params }) {
 
             {/* Actors List */}
             <div className="mb-6">
-              <h3 className="text-xl font-bold text-white mb-2">Aktor</h3>
+              <h3 className="text-xl font-bold text-white mb-2">Actors</h3>
               <p className="text-sm text-gray-400 leading-relaxed text-justify">
                 {cast.map(actor => actor.name).join(', ')}
               </p>
@@ -319,7 +319,7 @@ export default async function MediaDetailPage({ params }) {
 
         {/* Synopsis Section */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-white mb-4">Sinopsis</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Synopsis</h3>
           <p className="text-gray-300 leading-relaxed text-justify">{mediaOverview}</p>
         </div>
         
@@ -338,13 +338,13 @@ export default async function MediaDetailPage({ params }) {
               ></iframe>
             </div>
           ) : (
-            <p className="text-gray-500">Tidak ada trailer yang tersedia.</p>
+            <p className="text-gray-500">No trailer available.</p>
           )}
         </div>
 
         {/* You Might Also Like Section */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-white mb-4">Anda Mungkin Juga Menyukai</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">You Might Also Like</h3>
           {similarMovies.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
               {similarMovies.map(item => (
@@ -352,13 +352,13 @@ export default async function MediaDetailPage({ params }) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">Tidak ada film serupa yang tersedia.</p>
+            <p className="text-gray-500">No similar movies available.</p>
           )}
         </div>
 
         {/* User Reviews Section */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-white mb-4">Ulasan Pengguna</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">User Reviews</h3>
           {userReviews.length > 0 ? (
             <div className="space-y-6">
               {userReviews.map(review => (
@@ -374,13 +374,13 @@ export default async function MediaDetailPage({ params }) {
                       </div>
                     )}
                   </div>
-                  <p className="text-gray-400 text-sm italic">Dibuat pada: {new Date(review.created_at).toLocaleDateString()}</p>
-                  <p className="text-gray-300 mt-4 leading-relaxed text-justify">{review.content.split(' ').slice(0, 50).join(' ')}... <Link href={review.url} target="_blank" className="text-blue-400 hover:text-blue-300">Baca selengkapnya</Link></p>
+                  <p className="text-gray-400 text-sm italic">Created on: {new Date(review.created_at).toLocaleDateString()}</p>
+                  <p className="text-gray-300 mt-4 leading-relaxed text-justify">{review.content.split(' ').slice(0, 50).join(' ')}... <Link href={review.url} target="_blank" className="text-blue-400 hover:text-blue-300">Read more</Link></p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">Tidak ada ulasan yang tersedia.</p>
+            <p className="text-gray-500">No reviews available.</p>
           )}
         </div>
         

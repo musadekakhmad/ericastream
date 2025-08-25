@@ -1,61 +1,61 @@
 // ---------------------------------------------------------------- //
-// Nama File: app/layout.js
-// Fungsi: Merupakan layout utama untuk seluruh halaman web,
-//         digunakan untuk mengatur elemen-elemen yang tampil
-//         di semua halaman, seperti header, footer, dan lebar konten.
+// File Name: app/layout.js
+// Function: This is the main layout for the entire website,
+//         used to configure elements that appear
+//         on all pages, such as the header, footer, and content width.
 // ---------------------------------------------------------------- //
 
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AdsterraLayoutWrapper from '../components/AdsterraLayoutWrapper'; 
-// Menghapus import 'video.js/dist/video-js.css'; dari sini
+// Removed import 'video.js/dist/video-js.css'; from here
 
 export const metadata = {
-  // Mengubah judul dan deskripsi ke bahasa Indonesia
-  title: 'Libra Sinema | Nonton Film Gratis dan Streaming Serial Tv',
-  description: 'Tujuan utama Anda untuk streaming film dan acara TV gratis berkualitas tinggi.',
-  // Meta tag Open Graph untuk Facebook
+  // Changing title and description to English
+  title: 'Erica Stream | Watch Free Movies and TV Series Streaming',
+  description: 'Your ultimate destination for high-quality free movie and TV show streaming.',
+  // Open Graph meta tags for Facebook
   openGraph: {
-    title: 'Libra Sinema | Nonton Film Gratis dan Streaming Serial Tv',
-    description: 'Tujuan utama Anda untuk streaming film dan acara TV gratis berkualitas tinggi.',
-    url: 'https://librasinema.netlify.app/',
-    siteName: 'Libra Sinema',
+    title: 'Erica Stream | Watch Free Movies and TV Series Streaming',
+    description: 'Your ultimate destination for high-quality free movie and TV show streaming.',
+    url: 'https://ericastream.netlify.app/',
+    siteName: 'Erica Stream',
     images: [
       {
-        url: 'https://live.staticflickr.com/65535/54707174696_49edde76e3_b.jpg',
+        url: 'https://live.staticflickr.com/65535/54742212042_56276e557f_b.jpg',
         width: 1200,
         height: 630,
-        alt: 'Libra Sinema',
+        alt: 'Erica Stream',
       },
     ],
-    // Mengubah locale ke Indonesia
-    locale: 'id_ID',
+    // Changing locale to English
+    locale: 'en_US',
     type: 'website',
-    // Properti khusus untuk Facebook, 'og:app_id'
-    appId: 'librasinema',
+    // Special property for Facebook, 'og:app_id'
+    appId: 'cut.erna.984',
   },
-  // Meta tag Twitter Card
+  // Twitter Card meta tags
   twitter: {
     card: 'summary_large_image',
-    site: '@WatchStream123', // User Twitter Anda
+    site: '@WatchStream123', // Your Twitter user
     creator: '@WatchStream123',
-    // Mengubah judul dan deskripsi ke bahasa Indonesia
-    title: 'Libra Sinema | Nonton Film Gratis dan Streaming Serial Tv',
-    description: 'Tujuan utama Anda untuk streaming film dan acara TV gratis berkualitas tinggi.',
-    images: ['https://live.staticflickr.com/65535/54707174696_49edde76e3_b.jpg'], // Ganti dengan URL gambar yang sesuai
+    // Changing title and description to English
+    title: 'Erica Stream | Watch Free Movies and TV Series Streaming',
+    description: 'Your ultimate destination for high-quality free movie and TV show streaming.',
+    images: ['https://live.staticflickr.com/65535/54742212042_56276e557f_b.jpg'], // Replace with the appropriate image URL
   },
 }; 
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id">
-      {/* Menambahkan suppressHydrationWarning untuk mengatasi hydration error. */}
-      {/* Ini sering terjadi saat ada script pihak ketiga atau ekstensi browser yang memodifikasi tag body. */}
+    <html lang="en">
+      {/* Adding suppressHydrationWarning to address hydration errors. */}
+      {/* This often happens when third-party scripts or browser extensions modify the body tag. */}
       <body suppressHydrationWarning={true}>
         <AdsterraLayoutWrapper>
-          {/* Kontainer utama dengan lebar maksimum */}
-          {/* Memindahkan Header, konten, dan Footer ke dalam kontainer ini */}
+          {/* Main container with a maximum width */}
+          {/* Moving Header, content, and Footer into this container */}
           <div className="mx-auto max-w-7xl">
             <Header />
             {children}

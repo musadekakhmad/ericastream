@@ -1,35 +1,48 @@
 "use client";
-import React, { useState, useRef } from 'react';
-// Removed to avoid import error
-// import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+
+const API_KEY = 'ISI DENGAN API KEY ANDA'; // <-- ISI DENGAN API KEY ANDA
+const BASE_URL = 'https://tmdb-api-proxy.argoyuwono119.workers.dev';
 
 const Header = () => {
-  const [isMoviesDropdownOpen, setIsMoviesDropdownOpen] = useState(false);
-  const [isTvShowsDropdownOpen, setIsTvShowsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMoviesGenreOpen, setIsMoviesGenreOpen] = useState(false);
+  const [isTvShowsGenreOpen, setIsTvShowsGenreOpen] = useState(false);
+  const [moviesGenres, setMoviesGenres] = useState([]);
+  const [tvGenres, setTvGenres] = useState([]);
+  const [loadingGenres, setLoadingGenres] = useState(false);
+  const [error, setError] = useState(null);
 
-  const moviesTimeoutRef = useRef(null);
-  const tvShowsTimeoutRef = useRef(null);
+  // Function to fetch genres from TMDB API
+  const fetchGenres = async (mediaType) => {
+    setLoadingGenres(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BASE_URL}/genre/${mediaType}/list?api_key=${API_KEY}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.genres;
+    } catch (err) {
+      console.error(`Fetch genre error for ${mediaType}:`, err);
+      setError(err.message);
+      return [];
+    } finally {
+      setLoadingGenres(false);
+    }
+  };
 
-  const handleMoviesEnter = () => {
-    clearTimeout(moviesTimeoutRef.current);
-    setIsMoviesDropdownOpen(true);
-  };
-  const handleMoviesLeave = () => {
-    moviesTimeoutRef.current = setTimeout(() => {
-      setIsMoviesDropdownOpen(false);
-    }, 200);
-  };
-
-  const handleTvShowsEnter = () => {
-    clearTimeout(tvShowsTimeoutRef.current);
-    setIsTvShowsDropdownOpen(true);
-  };
-  const handleTvShowsLeave = () => {
-    tvShowsTimeoutRef.current = setTimeout(() => {
-      setIsTvShowsDropdownOpen(false);
-    }, 200);
-  };
+  // Effect to load genres on component mount
+  useEffect(() => {
+    const loadGenres = async () => {
+      const movies = await fetchGenres('movie');
+      const tv = await fetchGenres('tv');
+      setMoviesGenres(movies);
+      setTvGenres(tv);
+    };
+    loadGenres();
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -40,6 +53,12 @@ const Header = () => {
     if (searchQuery.trim() !== '') {
       window.location.href = `/search/${encodeURIComponent(searchQuery)}`;
     }
+  };
+
+  const handleGenreClick = (mediaType, id) => {
+    window.location.href = `/genre/${mediaType}/${id}`;
+    setIsMoviesGenreOpen(false);
+    setIsTvShowsGenreOpen(false);
   };
 
   return (
@@ -63,71 +82,123 @@ const Header = () => {
             transition: all 0.3s ease;
             box-shadow: 0 0 5px #ff7f00, 0 0 10px #ff7f00, 0 0 15px #ff7f00;
         }
-        .dropdown-menu {
-            animation: fadeIn 0.3s ease-in-out;
+        .genre-popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .genre-popup {
+            background: #1f2937;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        /* Perbaikan untuk tombol Home agar hover tidak memanjang */
+        .nav-button-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+        }
+        /* Specific hover colors for genre buttons inside pop-ups */
+        .genre-button-movie:hover {
+          background-color: #2563eb; /* blue-600 */
+        }
+        .genre-button-tv:hover {
+          background-color: #dc2626; /* red-600 */
+        }
+        /* Mengatur agar setiap 5 genre berada dalam satu baris, dan kemudian turun ke baris baru */
+        .genre-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 1024px) {
+            .genre-grid-5 {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
         }
         `}
       </style>
       <header className="bg-gray-800 text-white shadow-lg sticky top-0 z-50 rounded-xl">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between flex-wrap">
-          {/* Logo atau Nama Situs */}
+          {/* Logo or Site Name */}
           <div className="flex items-center">
-            {/* Mengubah tautan href ke halaman utama "/" */}
             <a href="/about" className="text-4xl font-extrabold tracking-tight cursor-pointer">
-              <span className="rainbow-text-header">Libra Sinema</span>
+              <span className="rainbow-text-header">Erica Stream</span>
             </a>
           </div>
 
-          {/* Navigasi Utama */}
+          {/* Main Navigation */}
           <nav className="flex items-center space-x-6 mt-4 sm:mt-0">
-            {/* Tombol Animasi mandiri */}
+            {/* Standalone Home button */}
             <div>
               <a href="/" className="flex items-center px-3 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10H6v-2h8m-8 4h8m-8 4h8M4 6v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z"></path>
-                </svg>
-                Animasi
+                <span className="nav-button-content">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10H6v-2h8m-8 4h8m-8 4h8M4 6v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z"></path>
+                  </svg>
+                  Home
+                </span>
               </a>
             </div>
             
-            {/* Tombol Movies dengan dropdown */}
-            <div className="relative group" onMouseEnter={handleMoviesEnter} onMouseLeave={handleMoviesLeave}>
-              <a href="#" className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M4 8h16M4 12h16M4 16h16"></path>
-                </svg>
-                Film
-              </a>
-              {isMoviesDropdownOpen && (
-                <div className="dropdown-menu absolute left-0 mt-2 w-48 bg-gray-700 rounded-md shadow-xl py-2 z-20">
-                  <a href="/movies/category/popular" className="block w-full text-left px-4 py-2 hover:bg-green-600">Terpopuler</a>
-                  <a href="/movies/category/now_playing" className="block w-full text-left px-4 py-2 hover:bg-green-600">Sedang Tayang</a>
-                  <a href="/movies/category/upcoming" className="block w-full text-left px-4 py-2 hover:bg-green-600">Segera Tayang</a>
-                  <a href="/movies/category/top_rated" className="block w-full text-left px-4 py-2 hover:bg-green-600">Rating Tertinggi</a>
-                </div>
-              )}
+            {/* Movies Genre button with pop-up functionality */}
+            <div>
+              <button
+                onClick={() => setIsMoviesGenreOpen(true)}
+                className="flex items-center px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+              >
+                <span className="nav-button-content">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M4 8h16M4 12h16M4 16h16"></path>
+                  </svg>
+                  Movies Genre
+                </span>
+              </button>
             </div>
 
-            {/* Tombol TV Shows dengan dropdown */}
-            <div className="relative group" onMouseEnter={handleTvShowsEnter} onMouseLeave={handleTvShowsLeave}>
-              <a href="#" className="flex items-center px-3 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200">
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20h4M10 4h4M4 10v4M20 10v4M6 6l12 12M6 18l12-12"></path>
-                </svg>
-                Serial TV
-              </a>
-              {isTvShowsDropdownOpen && (
-                <div className="dropdown-menu absolute left-0 mt-2 w-48 bg-gray-700 rounded-md shadow-xl py-2 z-20">
-                  <a href="/tv/category/popular" className="block w-full text-left px-4 py-2 hover:bg-green-600">Terpopuler</a>
-                  <a href="/tv/category/airing_today" className="block w-full text-left px-4 py-2 hover:bg-green-600">Tayang Hari Ini</a>
-                  <a href="/tv/category/on_the_air" className="block w-full text-left px-4 py-2 hover:bg-green-600">Di TV</a>
-                  <a href="/tv/category/top_rated" className="block w-full text-left px-4 py-2 hover:bg-green-600">Rating Tertinggi</a>
-                </div>
-              )}
+            {/* TV Shows Genre button with pop-up functionality */}
+            <div>
+              <button
+                onClick={() => setIsTvShowsGenreOpen(true)}
+                className="flex items-center px-3 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200"
+              >
+                <span className="nav-button-content">
+                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20h4M10 4h4M4 10v4M20 10v4M6 6l12 12M6 18l12-12"></path>
+                  </svg>
+                  TV Shows Genre
+                </span>
+              </button>
             </div>
           </nav>
 
@@ -137,7 +208,7 @@ const Header = () => {
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
-              placeholder="Cari film atau serial TV..."
+              placeholder="Search for movies or TV shows..."
               className="bg-gray-700 text-white rounded-full py-1 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-colors duration-300 w-40 sm:w-auto"
             />
             <button type="submit" className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
@@ -148,6 +219,60 @@ const Header = () => {
           </form>
         </div>
       </header>
+      
+      {/* Movies Genre Pop-up */}
+      {isMoviesGenreOpen && (
+        <div className="genre-popup-backdrop" onClick={() => setIsMoviesGenreOpen(false)}>
+          <div className="genre-popup" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsMoviesGenreOpen(false)}>&times;</button>
+            <h2 className="text-xl font-bold text-white mb-4">Movies Genres</h2>
+            {loadingGenres ? (
+              <p className="text-gray-400">Loading genres...</p>
+            ) : error ? (
+              <p className="text-red-400">Error loading genres: {error}</p>
+            ) : (
+              <div className="genre-grid-5">
+                {moviesGenres.map(genre => (
+                  <button
+                    key={genre.id}
+                    onClick={() => handleGenreClick('movie', genre.id)}
+                    className="bg-gray-700 text-white py-2 px-4 rounded-full text-sm transition-colors duration-200 genre-button-movie"
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TV Shows Genre Pop-up */}
+      {isTvShowsGenreOpen && (
+        <div className="genre-popup-backdrop" onClick={() => setIsTvShowsGenreOpen(false)}>
+          <div className="genre-popup" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsTvShowsGenreOpen(false)}>&times;</button>
+            <h2 className="text-xl font-bold text-white mb-4">TV Shows Genres</h2>
+            {loadingGenres ? (
+              <p className="text-gray-400">Loading genres...</p>
+            ) : error ? (
+              <p className="text-red-400">Error loading genres: {error}</p>
+            ) : (
+              <div className="genre-grid-5">
+                {tvGenres.map(genre => (
+                  <button
+                    key={genre.id}
+                    onClick={() => handleGenreClick('tv', genre.id)}
+                    className="bg-gray-700 text-white py-2 px-4 rounded-full text-sm transition-colors duration-200 genre-button-tv"
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -5,91 +5,91 @@ import React from 'react';
 const About = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
-      {/* Bagian Banner Hero */}
-      {/* Menggunakan rounded-xl dan shadow-2xl untuk efek visual yang menarik */}
-      {/* Menambahkan pt-20 untuk jarak dari header */}
+      {/* Hero Banner Section */}
+      {/* Using rounded-xl and shadow-2xl for attractive visual effects */}
+      {/* Added pt-20 for spacing from the header */}
       <div className="relative w-full h-48 md:h-64 lg:h-96 overflow-hidden rounded-xl shadow-2xl pt-7">
         <img
-          src="https://live.staticflickr.com/65535/54734663743_992c7169cc_b.jpg"
-          alt="Libra Sinema Banner"
+          src="https://live.staticflickr.com/65535/54742212042_56276e557f_b.jpg"
+          alt="Erica Stream Banner"
           className="w-full h-full object-cover object-center rounded-xl"
-          // Penanganan kesalahan gambar (fallback)
+          // Image error handling (fallback)
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = 'https://placehold.co/1920x1080/0d1117/2d3138?text=Libra-Sinema';
+            e.target.src = 'https://placehold.co/1920x1080/0d1117/2d3138?text=Erica-Stream';
           }}
         />
-        {/* Overlay gradient untuk memastikan teks di atas banner terbaca dengan jelas */}
+        {/* Gradient overlay to ensure text on the banner is clearly legible */}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
       </div>
       
-      {/* Kontainer Konten Utama */}
-      {/* Mengubah padding agar ada jarak di bagian atas dan bawah */}
+      {/* Main Content Container */}
+      {/* Adjusted padding for top and bottom spacing */}
       <div className="px-4 md:px-8 py-9"> 
-        {/* Bagian Tentang Kami */}
+        {/* About Us Section */}
         <section className="bg-gray-800 rounded-2xl p-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
-          {/* Judul utama dan deskripsi singkat */}
+          {/* Main title and short description */}
           <div className="flex flex-col items-center justify-center text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-lg mb-2 text-blue-500">
-              Libra Sinema: Nonton Film Gratis dan Streaming Serial Tv.
+            <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow-lg mb-2 text-blue-500">
+              Erica Stream: Watch Free Movies and TV Series
             </h1>
             <p className="text-xl md:text-2xl font-semibold opacity-80 mt-2">
-              Hiburan Tanpa Batas dan Berkualitas HD/FHD/4K.
+              Unlimited and High-Quality HD/FHD/4K Entertainment
             </p>
           </div>
           
-          {/* Bagian Misi dan Visi */}
-          <h2 className="text-3xl font-bold text-white mb-6">Misi dan Visi Kami</h2>
+          {/* Our Mission and Vision Section */}
+          <h2 className="text-3xl font-bold text-white mb-6">Our Mission and Vision</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Libra Sinema didirikan atas keyakinan sederhana: setiap orang berhak menikmati hiburan berkualitas tinggi tanpa batasan finansial. Di dunia yang dipenuhi layanan berbayar, kami muncul sebagai mercusuar kebebasan, menawarkan perpustakaan film dan serial TV HD yang luas sepenuhnya gratis. Visi kami melampaui sekadar streaming; kami membayangkan sebuah komunitas global di mana para penggemar film dapat terhubung, berbagi, dan merayakan sinema. Kami berkomitmen untuk mempertahankan platform yang ramah pengguna, bebas dari iklan yang mengganggu, dan terus diperbarui dengan konten segar dari seluruh dunia. Misi kami adalah untuk mengubah lanskap hiburan digital, menjadikannya lebih inklusif dan dapat diakses oleh semua orang, di mana pun mereka berada.
+            Erica Stream was founded on a simple belief: everyone deserves to enjoy high-quality entertainment without financial constraints. In a world filled with paid services, we emerged as a beacon of freedom, offering a vast library of HD movies and TV series completely free. Our vision goes beyond mere streaming; we envision a global community where movie enthusiasts can connect, share, and celebrate cinema. We are committed to maintaining a user-friendly platform, free from disruptive ads, and constantly updated with fresh content from around the globe. Our mission is to transform the digital entertainment landscape, making it more inclusive and accessible to everyone, no matter where they are.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Sejak awal, kami telah fokus pada penyediaan pengalaman menonton yang mulus. Algoritma streaming kami dioptimalkan untuk memastikan pemutaran instan, tanpa buffering yang mengganggu, bahkan pada koneksi yang lebih lambat. Kami memahami bahwa detail terkecil pun penting, dan itulah mengapa kami berinvestasi dalam infrastruktur yang menjamin kualitas HD yang tajam dan audio yang jernih. Kami bangga dengan teknologi kami, tetapi kami lebih bangga dengan dampak yang diberikannya—membawa senyum ke jutaan wajah di seluruh dunia dengan memungkinkan mereka untuk menikmati film favorit mereka tanpa kekhawatiran biaya.
+            From the beginning, we have focused on providing a seamless viewing experience. Our streaming algorithms are optimized to ensure instant playback with no annoying buffering, even on slower connections. We understand that the smallest details matter, which is why we invest in an infrastructure that guarantees sharp HD quality and crystal-clear audio. We are proud of our technology, but we are even prouder of the impact it has—bringing smiles to millions of faces worldwide by allowing them to enjoy their favorite films without worrying about the cost.
           </p>
 
-          {/* Bagian Perpustakaan Konten */}
-          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Perpustakaan Konten yang Luas</h2>
+          {/* Extensive Content Library Section */}
+          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Extensive Content Library</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Perpustakaan Libra Sinema adalah bukti dari hasrat kami terhadap sinema. Kami secara teliti mengkurasi koleksi kami untuk menawarkan berbagai genre yang tak tertandingi, melayani setiap selera dan suasana hati. Apakah Anda mencari ketegangan film horor, tawa riang komedi romantis, aksi mendebarkan, atau narasi kompleks dari drama, kami punya semuanya. Koleksi kami meliputi film-film klasik Hollywood, permata independen yang tersembunyi, dan sensasi internasional yang sedang tren. Kami percaya bahwa keragaman adalah kunci, dan perpustakaan kami mencerminkan komitmen itu, menawarkan konten dari setiap sudut dunia.
+            The Erica Stream library is a testament to our passion for cinema. We meticulously curate our collection to offer an unparalleled range of genres, catering to every taste and mood. Whether you're looking for the suspense of a horror film, the lighthearted laughter of a romantic comedy, the thrilling action, or the complex narratives of a drama, we have it all. Our collection includes Hollywood classics, hidden independent gems, and trending international sensations. We believe that diversity is key, and our library reflects that commitment, offering content from every corner of the world.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Setiap film dan serial TV dilengkapi dengan deskripsi yang mendalam, informasi pemeran dan kru, trailer, dan rating dari penonton. Kami ingin Anda membuat keputusan yang tepat tentang apa yang akan ditonton berikutnya. Fitur-fitur ini tidak hanya meningkatkan pengalaman menonton tetapi juga memberdayakan Anda untuk menjelajahi genre dan sutradara baru. Kami terus-menerus menambahkan judul-judul baru ke koleksi kami, memastikan selalu ada sesuatu yang baru dan menarik untuk ditemukan.
+            Every movie and TV series comes with a detailed description, cast and crew information, trailers, and audience ratings. We want you to make an informed decision about what to watch next. These features not only enhance the viewing experience but also empower you to explore new genres and directors. We are constantly adding new titles to our collection, ensuring there is always something new and exciting to discover.
           </p>
 
-          {/* Bagian Komunitas Kami */}
-          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Komunitas Kami</h2>
+          {/* Our Community Section */}
+          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Our Community</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Libra Sinema lebih dari sekadar platform streaming; ini adalah komunitas yang berkembang. Kami mendorong pengguna kami untuk berinteraksi dengan berbagi ulasan, rekomendasi, dan teori tentang film favorit mereka. Platform kami menyediakan ruang yang aman dan suportif bagi para penggemar film untuk terhubung, bertukar pikiran, dan membentuk hubungan yang bermakna. Kami secara aktif mendengarkan masukan dari komunitas kami dan menggunakannya untuk memandu keputusan kami tentang fitur baru dan konten yang akan ditambahkan.
+            Erica Stream is more than just a streaming platform; it's a thriving community. We encourage our users to interact by sharing reviews, recommendations, and theories about their favorite films. Our platform provides a safe and supportive space for movie fans to connect, exchange ideas, and form meaningful relationships. We actively listen to feedback from our community and use it to guide our decisions on new features and content to add.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Kami mengadakan acara-acara virtual, seperti malam film dan diskusi, untuk lebih memperkuat komunitas kami. Ini adalah kesempatan bagi anggota kami untuk berkumpul dan merayakan kecintaan bersama terhadap sinema. Partisipasi Anda sangat penting bagi kami, dan kami berterima kasih kepada setiap orang yang telah memilih untuk menjadi bagian dari perjalanan kami.
+            We host virtual events, such as movie nights and discussions, to further strengthen our community. It's an opportunity for our members to come together and celebrate their shared love for cinema. Your participation is vital to us, and we are grateful to everyone who has chosen to be a part of our journey.
           </p>
           
-          {/* Bagian Teknologi */}
-          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Teknologi di Balik Layar</h2>
+          {/* Technology Behind the Scenes Section */}
+          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Technology Behind the Scenes</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Teknologi yang mendukung Libra Sinema adalah keajaiban yang berfokus pada pengguna. Kami menggunakan jaringan pengiriman konten (CDN) yang canggih untuk memastikan bahwa film Anda di-streaming dari server terdekat, mengurangi latensi dan memastikan pemutaran tanpa gangguan. Infrastruktur kami dibangun untuk menahan lonjakan lalu lintas yang besar, memastikan bahwa Anda selalu mendapatkan layanan terbaik, tidak peduli berapa banyak orang lain yang menonton.
+            The technology that powers Erica Stream is a user-focused marvel. We use an advanced content delivery network (CDN) to ensure that your movies are streamed from the nearest server, reducing latency and guaranteeing uninterrupted playback. Our infrastructure is built to withstand massive surges in traffic, ensuring that you always get the best service, no matter how many other people are watching.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Selain itu, kami berinvestasi dalam langkah-langkah keamanan yang ketat untuk melindungi data pengguna dan memastikan lingkungan yang aman. Kami tidak mengumpulkan informasi pribadi yang tidak perlu, dan kami berkomitmen pada transparansi penuh tentang bagaimana data Anda digunakan. Privasi Anda adalah prioritas utama kami.
+            Additionally, we invest in strict security measures to protect user data and ensure a safe environment. We do not collect unnecessary personal information, and we are committed to full transparency about how your data is used. Your privacy is our top priority.
           </p>
 
-          {/* Bagian Perkembangan Masa Depan */}
-          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Perkembangan Masa Depan</h2>
+          {/* Future Developments Section */}
+          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Future Developments</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Kami tidak berpuas diri. Tim kami terus mengeksplorasi teknologi baru dan ide-ide inovatif untuk meningkatkan pengalaman Libra Sinema. Rencana masa depan kami meliputi implementasi fitur yang didukung AI untuk rekomendasi yang lebih personal, integrasi dengan media sosial untuk berbagi yang mulus, dan perpustakaan konten eksklusif yang terus berkembang. Kami juga berencana untuk memperluas dukungan bahasa kami, menjadikan Libra Sinema dapat diakses oleh audiens global yang lebih luas.
+            We are not resting on our laurels. Our team is continuously exploring new technologies and innovative ideas to enhance the Erica Stream experience. Our future plans include implementing AI-powered features for more personalized recommendations, integrating with social media for seamless sharing, and an ever-growing library of exclusive content. We also plan to expand our language support, making Erica Stream accessible to an even wider global audience.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Setiap langkah yang kami ambil didorong oleh dedikasi kami untuk memberikan pengalaman hiburan terbaik secara gratis. Kami menghargai dukungan Anda dan mengundang Anda untuk mengikuti kami dalam perjalanan yang mendebarkan ini. Libra Sinema adalah bukti dari kekuatan komunitas dan hasrat bersama terhadap sinema. Terima kasih telah menjadi bagian dari keluarga besar kami.
+            Every step we take is driven by our dedication to providing the best entertainment experience for free. We appreciate your support and invite you to follow us on this thrilling journey. Erica Stream is a testament to the power of community and a shared passion for cinema. Thank you for being a part of our extended family.
           </p>
 
-          {/* Bagian Tim Kami - Tambahan */}
-          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Tim Kami</h2>
+          {/* Our Team Section - Added */}
+          <h2 className="text-3xl font-bold text-white mb-6 mt-8">Our Team</h2>
           <p className="text-gray-300 text-justify leading-relaxed">
-            Di balik layar Libra Sinema, ada tim individu yang bersemangat yang bekerja tanpa lelah untuk menghidupkan visi kami. Dari pengembang yang mengoptimalkan pengalaman streaming Anda hingga kurator konten yang menemukan permata tersembunyi, setiap anggota tim berkomitmen pada keunggulan. Kami adalah sekelompok penggemar film dan serial TV yang berdedikasi untuk berbagi cinta kami pada sinema dengan dunia.
+            Behind the scenes at Erica Stream, there is a passionate team of individuals working tirelessly to bring our vision to life. From the developers who optimize your streaming experience to the content curators who find hidden gems, every team member is committed to excellence. We are a group of dedicated film and TV series fans who are devoted to sharing our love for cinema with the world.
           </p>
           <p className="mt-4 text-gray-300 text-justify leading-relaxed">
-            Kami percaya bahwa tim yang kuat dibangun di atas kolaborasi dan saling menghormati. Kami mendorong kreativitas, inovasi, dan komunikasi terbuka, memastikan bahwa setiap ide didengar. Tim kami adalah keluarga kami, dan semangat itu tercermin dalam setiap aspek platform yang kami bangun.
+            We believe that a strong team is built on collaboration and mutual respect. We encourage creativity, innovation, and open communication, ensuring that every idea is heard. Our team is our family, and that spirit is reflected in every aspect of the platform we build.
           </p>
         </section>
       </div>
