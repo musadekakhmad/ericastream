@@ -26,7 +26,10 @@ const useFetch = (url) => {
         throw new Error(`Error: ${response.status}`);
       }
       const json = await response.json();
-      setData(json);
+      
+      // Update the data by appending the new results
+      setData(prevData => [...prevData, ...json.results]);
+      setHasMore(json.page < json.total_pages);
     } catch (err) {
       setError(err.message);
       console.error("Fetch error:", err);
@@ -124,16 +127,8 @@ export default function Home() {
       }
       const json = await response.json();
       
-      // Check if the current data is empty. If it is, this is the initial fetch.
-      // We will set the data directly.
-      setData(prevData => {
-        if (page === 1) {
-          return json.results;
-        } else {
-          // If it's a subsequent fetch, we append the new data.
-          return [...prevData, ...json.results];
-        }
-      });
+      // Update the data by appending the new results
+      setData(prevData => [...prevData, ...json.results]);
       setHasMore(json.page < json.total_pages);
     } catch (err) {
       setError(err.message);
@@ -154,16 +149,8 @@ export default function Home() {
       }
       const json = await response.json();
       
-      // Check if the current data is empty. If it is, this is the initial fetch.
-      // We will set the data directly.
-      setData(prevData => {
-        if (page === 1) {
-          return json.results;
-        } else {
-          // If it's a subsequent fetch, we append the new data.
-          return [...prevData, ...json.results];
-        }
-      });
+      // Update the data by appending the new results
+      setData(prevData => [...prevData, ...json.results]);
       setHasMore(json.page < json.total_pages);
     } catch (err) {
       setError(err.message);
@@ -275,8 +262,8 @@ export default function Home() {
   const CategorySection = ({ title, data, loading, error, hasMore, onLoadMore, mediaType, displayCount }) => (
     <section className="mb-12">
       <h2 className="text-3xl font-bold text-white mb-6">{title}</h2>
-      {loading && <p className="text-center text-gray-400">Memuat {mediaType}...</p>}
-      {error && <p className="text-center text-red-400">Kesalahan: {error}</p>}
+      {loading && <p className="text-center text-gray-400">Loading {mediaType}...</p>}
+      {error && <p className="text-center text-red-400">Error: {error}</p>}
       {data.length > 0 && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
@@ -290,7 +277,7 @@ export default function Home() {
                 onClick={onLoadMore}
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-colors duration-300"
               >
-                Tampilkan Lebih
+                Show More
               </button>
             </div>
           )}
@@ -300,108 +287,128 @@ export default function Home() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Movies Section */}
-      <h2 className="text-4xl font-extrabold text-white mt-8 mb-8 text-center">Movies</h2>
-
-      {/* Popular Movies Section */}
-      <CategorySection
-        title="Popular Movies"
-        data={popularMoviesData}
-        loading={popularMoviesLoading}
-        error={popularMoviesError}
-        hasMore={hasMorePopularMovies}
-        onLoadMore={handleLoadMorePopularMovies}
-        mediaType="movie"
-        displayCount={popularMoviesDisplayCount}
-      />
-
-      {/* Top Rated Movies Section */}
-      <CategorySection
-        title="Top Rated Movies"
-        data={topRatedMoviesData}
-        loading={topRatedMoviesLoading}
-        error={topRatedMoviesError}
-        hasMore={hasMoreTopRatedMovies}
-        onLoadMore={handleLoadMoreTopRatedMovies}
-        mediaType="movie"
-        displayCount={topRatedMoviesDisplayCount}
-      />
-
-      {/* Upcoming Movies Section */}
-      <CategorySection
-        title="Upcoming Movies"
-        data={upcomingMoviesData}
-        loading={upcomingMoviesLoading}
-        error={upcomingMoviesError}
-        hasMore={hasMoreUpcomingMovies}
-        onLoadMore={handleLoadMoreUpcomingMovies}
-        mediaType="movie"
-        displayCount={upcomingMoviesDisplayCount}
-      />
+    <div className="min-h-screen bg-gray-900 text-white font-sans">
+      {/* Hero Section */}
+      <div className="relative mt-8 w-full h-48 md:h-64 lg:h-96 overflow-hidden rounded-xl shadow-2xl" suppressHydrationWarning={true}>
+          <img
+              src="https://live.staticflickr.com/65535/54742212042_56276e557f_b.jpg"
+              alt="Erica Stream Banner"
+              className="w-full h-full object-cover object-center"
+              onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://placehold.co/1920x1080/0d1117/2d3138?text=Erica-Stream';
+              }}
+          />
+      </div>
       
-      {/* Now Playing Movies Section */}
-      <CategorySection
-        title="Now Playing Movies"
-        data={nowPlayingMoviesData}
-        loading={nowPlayingMoviesLoading}
-        error={nowPlayingMoviesError}
-        hasMore={hasMoreNowPlayingMovies}
-        onLoadMore={handleLoadMoreNowPlayingMovies}
-        mediaType="movie"
-        displayCount={nowPlayingMoviesDisplayCount}
-      />
+      {/* Main content container with padding */}
+      <div className="px-4 md:px-8">
+        <h1 className="text-2xl font-bold text-center mt-8 mb-12 text-blue-300 leading-tight md:text-3xl">
+          Erica Stream: The hub for high-quality free movies and TV shows for you.
+        </h1>
 
-      {/* TV Shows Section */}
-      <h2 className="text-4xl font-extrabold text-white mt-16 mb-8 text-center">TV Shows</h2>
+        {/* Movies Section */}
+        <h2 className="text-4xl font-extrabold text-white mt-8 mb-8 text-center">Movies</h2>
 
-      {/* Popular TV Shows Section */}
-      <CategorySection
-        title="Popular TV Shows"
-        data={popularTvData}
-        loading={popularTvLoading}
-        error={popularTvError}
-        hasMore={hasMorePopularTv}
-        onLoadMore={handleLoadMorePopularTv}
-        mediaType="tv"
-        displayCount={popularTvDisplayCount}
-      />
+        {/* Popular Movies Section */}
+        <CategorySection
+          title="Popular Movies"
+          data={popularMoviesData}
+          loading={popularMoviesLoading}
+          error={popularMoviesError}
+          hasMore={hasMorePopularMovies}
+          onLoadMore={handleLoadMorePopularMovies}
+          mediaType="movie"
+          displayCount={popularMoviesDisplayCount}
+        />
 
-      {/* Top Rated TV Shows Section */}
-      <CategorySection
-        title="Top Rated TV Shows"
-        data={topRatedTvData}
-        loading={topRatedTvLoading}
-        error={topRatedTvError}
-        hasMore={hasMoreTopRatedTv}
-        onLoadMore={handleLoadMoreTopRatedTv}
-        mediaType="tv"
-        displayCount={topRatedTvDisplayCount}
-      />
-      
-      {/* On The Air TV Shows Section */}
-      <CategorySection
-        title="On The Air TV Shows"
-        data={onTheAirTvData}
-        loading={onTheAirTvLoading}
-        error={onTheAirTvError}
-        hasMore={hasMoreOnTheAirTv}
-        onLoadMore={handleLoadMoreOnTheAirTv}
-        mediaType="tv"
-        displayCount={onTheAirTvDisplayCount}
-      />
-      
-      {/* Airing Today TV Shows Section */}
-      <CategorySection
-        title="Airing Today TV Shows"
-        data={airingTodayTvData}
-        loading={airingTodayTvLoading}
-        error={airingTodayTvError}
-        hasMore={hasMoreAiringTodayTv}
-        onLoadMore={handleLoadMoreAiringTodayTv}
-        mediaType="tv"
-        displayCount={airingTodayTvDisplayCount}
-      />
+        {/* Top Rated Movies Section */}
+        <CategorySection
+          title="Top Rated Movies"
+          data={topRatedMoviesData}
+          loading={topRatedMoviesLoading}
+          error={topRatedMoviesError}
+          hasMore={hasMoreTopRatedMovies}
+          onLoadMore={handleLoadMoreTopRatedMovies}
+          mediaType="movie"
+          displayCount={topRatedMoviesDisplayCount}
+        />
+
+        {/* Upcoming Movies Section */}
+        <CategorySection
+          title="Upcoming Movies"
+          data={upcomingMoviesData}
+          loading={upcomingMoviesLoading}
+          error={upcomingMoviesError}
+          hasMore={hasMoreUpcomingMovies}
+          onLoadMore={handleLoadMoreUpcomingMovies}
+          mediaType="movie"
+          displayCount={upcomingMoviesDisplayCount}
+        />
+        
+        {/* Now Playing Movies Section */}
+        <CategorySection
+          title="Now Playing Movies"
+          data={nowPlayingMoviesData}
+          loading={nowPlayingMoviesLoading}
+          error={nowPlayingMoviesError}
+          hasMore={hasMoreNowPlayingMovies}
+          onLoadMore={handleLoadMoreNowPlayingMovies}
+          mediaType="movie"
+          displayCount={nowPlayingMoviesDisplayCount}
+        />
+
+        {/* TV Shows Section */}
+        <h2 className="text-4xl font-extrabold text-white mt-16 mb-8 text-center">TV Shows</h2>
+
+        {/* Popular TV Shows Section */}
+        <CategorySection
+          title="Popular TV Shows"
+          data={popularTvData}
+          loading={popularTvLoading}
+          error={popularTvError}
+          hasMore={hasMorePopularTv}
+          onLoadMore={handleLoadMorePopularTv}
+          mediaType="tv"
+          displayCount={popularTvDisplayCount}
+        />
+
+        {/* Top Rated TV Shows Section */}
+        <CategorySection
+          title="Top Rated TV Shows"
+          data={topRatedTvData}
+          loading={topRatedTvLoading}
+          error={topRatedTvError}
+          hasMore={hasMoreTopRatedTv}
+          onLoadMore={handleLoadMoreTopRatedTv}
+          mediaType="tv"
+          displayCount={topRatedTvDisplayCount}
+        />
+        
+        {/* On The Air TV Shows Section */}
+        <CategorySection
+          title="On The Air TV Shows"
+          data={onTheAirTvData}
+          loading={onTheAirTvLoading}
+          error={onTheAirTvError}
+          hasMore={hasMoreOnTheAirTv}
+          onLoadMore={handleLoadMoreOnTheAirTv}
+          mediaType="tv"
+          displayCount={onTheAirTvDisplayCount}
+        />
+        
+        {/* Airing Today TV Shows Section */}
+        <CategorySection
+          title="Airing Today TV Shows"
+          data={airingTodayTvData}
+          loading={airingTodayTvLoading}
+          error={airingTodayTvError}
+          hasMore={hasMoreAiringTodayTv}
+          onLoadMore={handleLoadMoreAiringTodayTv}
+          mediaType="tv"
+          displayCount={airingTodayTvDisplayCount}
+        />
+      </div>
     </div>
   );
 }
