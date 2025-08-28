@@ -14,13 +14,13 @@ import AdsterraLayoutWrapper from '../components/AdsterraLayoutWrapper';
 export const metadata = {
   // Changing title and description to English
   title: 'Erica Stream | Watch Movies and TV Series Streaming Free',
-  description: 'Your ultimate destination for high-quality Watch movies and TV shows streaming.',
+  description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
   // Menambahkan meta keywords untuk SEO
   keywords: ['Erica Stream', 'watch free movies', 'watch free tv series', 'streaming', 'film gratis'],
   // Open Graph meta tags for Facebook
   openGraph: {
     title: 'Erica Stream | Watch Movies and TV Series Streaming Free',
-    description: 'Your ultimate destination for high-quality Watch movies and TV shows streaming.',
+    description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
     url: 'https://ericastream.netlify.app/',
     siteName: 'Erica Stream',
     images: [
@@ -44,7 +44,7 @@ export const metadata = {
     creator: '@WatchStream123',
     // Mengoreksi kesalahan ketik pada deskripsi
     title: 'Erica Stream | Watch Movies and TV Series Streaming Free',
-    description: 'Your ultimate destination for high-quality Watch movies and TV shows streaming.',
+    description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
     images: ['https://live.staticflickr.com/65535/54742212042_56276e557f_b.jpg'], // Replace with the appropriate image URL
   },
 }; 
